@@ -3,7 +3,9 @@
 {% block content %}
     <h1>Welcome to College Canteen</h1>
     {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}! {% if user.user_type == 'student' %}Browse the <a href="{% url 'menu' %}">menu</a> to place an order.{% else %}Manage the canteen via the <a href="/admin/">admin panel</a>.{% endif %}</p>
+        <p>Hello, {{ user.username }}! {% if user.user_type == 'student' %}
+            <p>CI/CD Test Update - {{ request.get_full_path }}</p>
+            Browse the <a href="{% url 'menu' %}">menu</a> to place an order.{% else %}Manage the canteen via the <a href="/admin/">admin panel</a>.{% endif %}</p>
     {% else %}
         <p>Please <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a>.</p>
     {% endif %}
