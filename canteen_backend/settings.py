@@ -11,28 +11,26 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import os
+import dj_database_url  # Added to fix NameError
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-import os
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# canteen_backend/settings.py
-from decouple import config
-
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
-ALLOWED_HOSTS = ['*']  # Update with Render domain after deployment
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')  # Updated to use config with fallback to '*'
 
 # Application definition
-
-# canteen_backend/settings.py
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,7 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'core',
     'api',
-]       
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -59,12 +57,11 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://college-canteen-yiad.onrender.com',  # Add after deployment
+    'https://college-canteen-yiad.onrender.com',  # Add after deployment; adjust if testing locally
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
 AUTH_USER_MODEL = 'core.User'
-
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -92,25 +89,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'canteen_backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'))
+    'default': dj_database_url.config(default=config('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')))
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -126,10 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -138,10 +122,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-import os
-
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'core/static')]
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
