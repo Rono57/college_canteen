@@ -1,0 +1,32 @@
+<!-- core/templates/menu.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Menu</h2>
+    <div id="menu-list"></div>
+    <script>
+        async function loadMenu() {
+            try {
+                const response = await axios.get('/api/menus/');
+                const menus = response.data;
+                document.getElementById('menu-list').innerHTML = menus.map(menu => `
+                    <div class="card menu-item">
+                        <div class="card-body">
+                            <h5>${menu.name}</h5>
+                            <p>${menu.description} - $${menu.price}</p>
+                            <p>Stock: ${menu.stock}</p>
+                            <button class="btn btn-primary" onclick="addToCart(${menu.id}, '${menu.name}', ${menu.price})">Add to Cart</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading menu:', error);
+            }
+        }
+        let cart = [];
+        function addToCart(id, name, price) {
+            cart.push({ id, name, price, quantity: 1 });
+            alert(`${name} added to cart!`);
+        }
+        loadMenu();
+    </script>
+{% endblock %}

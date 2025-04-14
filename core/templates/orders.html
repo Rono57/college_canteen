@@ -1,0 +1,39 @@
+<!-- core/templates/orders.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h2>My Orders</h2>
+    <div id="order-list"></div>
+    <script>
+        async function loadOrders() {
+            try {
+                const response = await axios.get('/api/orders/');
+                const orders = response.data;
+                document.getElementById('order-list').innerHTML = orders.map(order => `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Order ${order.token_number}</h5>
+                            <p>Status: ${order.status}</p>
+                            <p>Total: $${order.total_amount}</p>
+                            <p>Placed: ${new Date(order.created_at).toLocaleString()}</p>
+                            ${order.payment && order.payment.status === 'pending' ? `
+                                <button class="btn btn-success" onclick="payOrder(${order.id})">Pay Now</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading orders:', error);
+            }
+        }
+        async function payOrder(orderId) {
+            try {
+                await axios.post(`/api/orders/${orderId}/pay/`);
+                alert('Payment successful!');
+                loadOrders();
+            } catch (error) {
+                alert('Payment failed: ' + error.response.data);
+            }
+        }
+        loadOrders();
+    </script>
+{% endblock %}

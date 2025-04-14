@@ -1,0 +1,9 @@
+/* core/static/css/style.css */
+.card {
+    margin-bottom: 1rem;
+}
+.menu-item {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 5px;
+}

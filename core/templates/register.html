@@ -1,0 +1,46 @@
+<!-- core/templates/register.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Register</h2>
+    <form id="register-form">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone">
+        </div>
+        <div class="mb-3">
+            <label for="place" class="form-label">Place</label>
+            <input type="text" class="form-control" id="place">
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                phone: document.getElementById('phone').value,
+                place: document.getElementById('place').value
+            };
+            try {
+                await axios.post('/api/register/', data);
+                window.location.href = '/login/';
+            } catch (error) {
+                alert('Registration failed: ' + error.response.data);
+            }
+        });
+    </script>
+{% endblock %}

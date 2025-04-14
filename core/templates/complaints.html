@@ -1,0 +1,47 @@
+<!-- core/templates/complaints.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Complaints</h2>
+    <form id="complaint-form" class="mb-4">
+        <div class="mb-3">
+            <label for="description" class="form-label">Complaint</label>
+            <textarea class="form-control" id="description" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div id="complaint-list"></div>
+    <script>
+        async function loadComplaints() {
+            try {
+                const response = await axios.get('/api/complaints/');
+                const complaints = response.data;
+                document.getElementById('complaint-list').innerHTML = complaints.map(c => `
+                    <div class="card">
+                        <div class="card-body">
+                            <p>${c.description}</p>
+                            <p>Status: ${c.status}</p>
+                            ${c.reply ? `<p>Reply: ${c.reply}</p>` : ''}
+                            <p>Filed: ${new Date(c.created_at).toLocaleString()}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading complaints:', error);
+            }
+        }
+        document.getElementById('complaint-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                description: document.getElementById('description').value
+            };
+            try {
+                await axios.post('/api/complaints/', data);
+                document.getElementById('complaint-form').reset();
+                loadComplaints();
+            } catch (error) {
+                alert('Failed to submit complaint: ' + error.response.data);
+            }
+        });
+        loadComplaints();
+    </script>
+{% endblock %}
