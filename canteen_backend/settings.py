@@ -59,7 +59,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://your-render-domain.onrender.com',  # Add after deployment
+    'https://college-canteen-yiad.onrender.com',  # Add after deployment
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
