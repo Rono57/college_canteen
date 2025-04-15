@@ -1,2 +1,2 @@
 # Procfile
-web: gunicorn canteen_backend.wsgi:application --bind 0.0.0.0:$PORT
+web: waitress-serve --port=$PORT --host=0.0.0.0 canteen_backend.wsgi:application
