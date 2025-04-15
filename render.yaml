@@ -1,0 +1,27 @@
+# render.yaml
+services:
+  - type: web
+    name: college_canteen
+    env: python
+    runtime: python-3.11
+    buildCommand: "pip install -r requirements.txt && python manage.py migrate --noinput"
+    startCommand: "python3 -m waitress --port=$PORT --host=0.0.0.0 canteen_backend.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: college_canteen_db
+          property: connectionString
+      - key: SECRET_KEY
+        value: OdaVaVpZo5clINE8D_MLriSXMy174TuQQ1A98Z6gcoEoYxtO8GRevj93b3UoYBut8hc
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "college-canteen-yiad.onrender.com"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://college-canteen-yiad.onrender.com"
+    autoDeploy: true
+databases:
+  - name: college_canteen_db
+    databaseName: college_canteen_db
+    user: college_canteen_db_user
+    plan: free
