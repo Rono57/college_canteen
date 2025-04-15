@@ -1,2 +1,2 @@
 # Procfile
-web: waitress-serve --port=$PORT --host=0.0.0.0 canteen_backend.wsgi:application
+web: python3 -m waitress --port=$PORT --host=0.0.0.0 canteen_backend.wsgi:application
