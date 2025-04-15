@@ -4,7 +4,7 @@ services:
     name: college_canteen
     env: python
     runtime: python-3.11.11
-    buildCommand: "pip install -r requirements.txt && python manage.py migrate --noinput"
+    buildCommand: "pip install -r requirements.txt && python manage.py makemigrations && python manage.py migrate --noinput"
     startCommand: "python3 -m waitress --port=$PORT --host=0.0.0.0 canteen_backend.wsgi:application"
     envVars:
       - key: DATABASE_URL
